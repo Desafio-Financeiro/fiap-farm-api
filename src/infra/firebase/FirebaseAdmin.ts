@@ -1,13 +1,16 @@
 import admin from 'firebase-admin';
-import path from 'path';
+import dotenv from 'dotenv';
 
-const serviceAccountPath = path.resolve(
-  __dirname,
-  './../../../fiap-farm-firebase.json',
-);
+dotenv.config();
+
+if (!process.env.FIREBASE_CONFIG) {
+  throw new Error('FIREBASE_CONFIG not set');
+}
+
+const serviceAccount = JSON.parse(process.env.FIREBASE_CONFIG);
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccountPath),
+  credential: admin.credential.cert(serviceAccount),
 });
 
 export default admin;
