@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import GoalController from '@/interfaces/http/controllers/GoalController';
 
-const goalRouter = Router();
+const goalsRouter = Router();
 
-goalRouter.get('/', async (req, res, next) => {
+goalsRouter.get('/', async (req, res, next) => {
   try {
     const goals = await GoalController.listGoals();
     res.json(goals);
@@ -12,7 +12,7 @@ goalRouter.get('/', async (req, res, next) => {
   }
 });
 
-goalRouter.post('/', async (req, res, next) => {
+goalsRouter.post('/', async (req, res, next) => {
   try {
     const goal = await GoalController.createGoal(req);
     res.status(201).json(goal);
@@ -21,7 +21,7 @@ goalRouter.post('/', async (req, res, next) => {
   }
 });
 
-goalRouter.get('/:id', async (req, res, next) => {
+goalsRouter.get('/:id', async (req, res, next) => {
   try {
     const goal = await GoalController.showGoal(req);
     res.json(goal);
@@ -30,7 +30,7 @@ goalRouter.get('/:id', async (req, res, next) => {
   }
 });
 
-goalRouter.put('/:id', async (req, res, next) => {
+goalsRouter.put('/:id', async (req, res, next) => {
   try {
     const goal = await GoalController.updateGoal(req);
     res.json(goal);
@@ -39,4 +39,4 @@ goalRouter.put('/:id', async (req, res, next) => {
   }
 });
 
-export default goalRouter;
+export default goalsRouter;

@@ -10,8 +10,9 @@ import usersRouter from './interfaces/http/routes/users';
 import errorHandler from './interfaces/http/ErroHandler';
 import productsRouter from '@/interfaces/http/routes/products';
 import salesRouter from '@/interfaces/http/routes/sales';
-import goalRouter from '@/interfaces/http/routes/goals';
-import productionRouter from '@/interfaces/http/routes/productions';
+import goalsRouter from '@/interfaces/http/routes/goals';
+import productionsRouter from '@/interfaces/http/routes/productions';
+import inventoryMovementRouter from '@/interfaces/http/routes/inventoryMovements';
 
 const app = express();
 
@@ -27,8 +28,9 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/products', productsRouter);
 app.use('/sales', salesRouter);
-app.use('/goals', goalRouter);
-app.use('/productions', productionRouter);
+app.use('/goals', goalsRouter);
+app.use('/productions', productionsRouter);
+app.use('/inventory-movements', inventoryMovementRouter);
 
 app.use(errorHandler);
 

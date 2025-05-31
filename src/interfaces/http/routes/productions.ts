@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import ProductionController from '@/interfaces/http/controllers/ProductionController';
 
-const productionRouter = Router();
+const productionsRouter = Router();
 
-productionRouter.get('/', async (req, res, next) => {
+productionsRouter.get('/', async (req, res, next) => {
   try {
     const productions = await ProductionController.listProductions();
     res.json(productions);
@@ -12,7 +12,7 @@ productionRouter.get('/', async (req, res, next) => {
   }
 });
 
-productionRouter.post('/', async (req, res, next) => {
+productionsRouter.post('/', async (req, res, next) => {
   try {
     const production = await ProductionController.createProduction(req);
     res.status(201).json(production);
@@ -21,7 +21,7 @@ productionRouter.post('/', async (req, res, next) => {
   }
 });
 
-productionRouter.get('/:id', async (req, res, next) => {
+productionsRouter.get('/:id', async (req, res, next) => {
   try {
     const production = await ProductionController.showProduction(req);
     res.json(production);
@@ -30,7 +30,7 @@ productionRouter.get('/:id', async (req, res, next) => {
   }
 });
 
-productionRouter.put('/:id', async (req, res, next) => {
+productionsRouter.put('/:id', async (req, res, next) => {
   try {
     const production = await ProductionController.updateProduction(req);
     res.json(production);
@@ -39,4 +39,4 @@ productionRouter.put('/:id', async (req, res, next) => {
   }
 });
 
-export default productionRouter;
+export default productionsRouter;
