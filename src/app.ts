@@ -8,7 +8,10 @@ import logger from 'morgan';
 import indexRouter from './interfaces/http/routes';
 import usersRouter from './interfaces/http/routes/users';
 import errorHandler from './interfaces/http/ErroHandler';
-import productRouter from '@/interfaces/http/routes/product';
+import productsRouter from '@/interfaces/http/routes/products';
+import salesRouter from '@/interfaces/http/routes/sales';
+import goalRouter from '@/interfaces/http/routes/goals';
+import productionRouter from '@/interfaces/http/routes/productions';
 
 const app = express();
 
@@ -22,7 +25,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/product', productRouter);
+app.use('/products', productsRouter);
+app.use('/sales', salesRouter);
+app.use('/goals', goalRouter);
+app.use('/productions', productionRouter);
 
 app.use(errorHandler);
 
