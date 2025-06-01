@@ -40,7 +40,15 @@ const removeProduct = async (req: Request) => {
   return await removeProductUseCase.execute(id);
 };
 
-const UserController = {
+export const verifyProductExists = async (id: Product['uid']) => {
+  const product = await showProductUseCase.execute(id);
+
+  if (!product) {
+    throw new Error(`Product with id ${id} not found`);
+  }
+};
+
+const ProductController = {
   listProducts,
   createProduct,
   showProduct,
@@ -48,4 +56,4 @@ const UserController = {
   removeProduct,
 };
 
-export default UserController;
+export default ProductController;
