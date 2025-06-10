@@ -1,10 +1,10 @@
 export interface InventoryMovement {
   uid?: string;
   productId: string;
-  type: TypeInventoryMovement; // "entrada", "saida"
+  type: TypeInventoryMovement;
   quantity: number;
-  source: SourceInventoryMovement; // ex: "producao", "venda"
-  referenceId: string; // ID da venda ou produção
+  source: SourceInventoryMovement;
+  referenceId: string;
   createdAt?: Date;
 }
 

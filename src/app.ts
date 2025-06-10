@@ -1,18 +1,22 @@
 import 'module-alias/register';
 
-import express from 'express';
 import path from 'path';
+
+import express from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import swaggerUi from 'swagger-ui-express';
 
 import indexRouter from './interfaces/http/routes';
 import usersRouter from './interfaces/http/routes/users';
 import errorHandler from './interfaces/http/ErroHandler';
+
 import productsRouter from '@/interfaces/http/routes/products';
 import salesRouter from '@/interfaces/http/routes/sales';
 import goalsRouter from '@/interfaces/http/routes/goals';
 import productionsRouter from '@/interfaces/http/routes/productions';
 import inventoryMovementRouter from '@/interfaces/http/routes/inventoryMovements';
+import swaggerSpec from '@/swagger';
 
 const app = express();
 
@@ -31,6 +35,7 @@ app.use('/sales', salesRouter);
 app.use('/goals', goalsRouter);
 app.use('/productions', productionsRouter);
 app.use('/inventory-movements', inventoryMovementRouter);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(errorHandler);
 
