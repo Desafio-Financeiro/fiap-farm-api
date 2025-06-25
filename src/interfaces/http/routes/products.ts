@@ -77,7 +77,7 @@ import ProductController from '@/interfaces/http/controllers/ProductController';
  *         schema:
  *           type: string
  *     responses:
- *       204:
+ *       200:
  *         description: Produto removido
  */
 
@@ -122,10 +122,11 @@ productRouter.put('/:id', async (req, res, next) => {
 productRouter.delete('/:id', async (req, res, next) => {
   try {
     await ProductController.removeProduct(req);
-    res.status(204).send();
+    res.status(200).send();
   } catch (error) {
     next(error);
   }
 });
 
 export default productRouter;
+
