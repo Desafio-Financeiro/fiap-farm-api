@@ -53,6 +53,11 @@ const options = {
             area: { type: 'number', example: 10 },
             quantityExpected: { type: 'number', example: 1000 },
             quantityHarvested: { type: 'number', example: 950 },
+            cost: {
+              type: 'number',
+              example: 1200,
+              description: 'Custo total da produção em reais (R$)',
+            },
             status: {
               type: 'string',
               enum: ['WAITING', 'IN_PROGRESS', 'HARVESTED'],
@@ -63,7 +68,15 @@ const options = {
             userId: { type: 'number', example: 1 },
             createdAt: { type: 'string', format: 'date-time', example: '2025-02-01T00:00:00Z' },
           },
-          required: ['productId', 'area', 'quantityExpected', 'status', 'plantingDate', 'userId'],
+          required: [
+            'productId',
+            'area',
+            'quantityExpected',
+            'status',
+            'plantingDate',
+            'userId',
+            'cost',
+          ],
         },
         InventoryMovement: {
           type: 'object',

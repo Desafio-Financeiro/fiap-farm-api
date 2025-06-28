@@ -1,3 +1,5 @@
+import { Request } from 'express';
+
 import { SaleRepositoryFirebase } from '@/infra/firebase/SaleRepositoryFirebase';
 import { ListSaleUseCase } from '@/usercases/sale/ListSaleUseCase';
 import { UpdateSaleUseCase } from '@/usercases/sale/UpdateSaleUseCase';
@@ -6,7 +8,7 @@ import { ShowSaleUseCase } from '@/usercases/sale/ShowSaleUseCase';
 import { RemoveSaleUseCase } from '@/usercases/sale/RemoveSaleUseCase';
 import { verifyProductExists } from '@/interfaces/http/controllers/ProductController';
 import { Sale } from '@/domain/entities/Sale';
-import { Request } from 'express';
+
 
 const saleRepo = new SaleRepositoryFirebase();
 const listSaleUseCase = new ListSaleUseCase(saleRepo);
