@@ -1,3 +1,5 @@
+import { Request } from 'express';
+
 import { ProductRepositoryFirebase } from '@/infra/firebase/ProductRepositoryFirebase';
 import { ListProductUseCase } from '@/usercases/product/ListProductUseCase';
 import { UpdateProductUseCase } from '@/usercases/product/UpdateProductUseCase';
@@ -5,7 +7,6 @@ import { CreateProductUseCase } from '@/usercases/product/CreateProductUseCase';
 import { ShowProductUseCase } from '@/usercases/product/ShowProductUseCase';
 import { RemoveProductUseCase } from '@/usercases/product/RemoveProductUseCase';
 import { Product } from '@/domain/entities/Product';
-import { Request } from 'express';
 
 const productRepo = new ProductRepositoryFirebase();
 const listProductUseCase = new ListProductUseCase(productRepo);

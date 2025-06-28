@@ -10,4 +10,11 @@ export interface ProductionRepository {
   updateProduction(production: Production): Promise<Production>;
 
   deleteProduction(uid: Production['uid']): Promise<void>;
+
+  getProductionsByProductId(productId: Production['productId']): Promise<Production[]>;
+
+  getProductionsByStatusByProductId(
+    status: Production['status'],
+    productId: Production['productId'],
+  ): Promise<Production[]>;
 }

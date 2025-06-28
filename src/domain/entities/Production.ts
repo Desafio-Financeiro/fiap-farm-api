@@ -4,14 +4,15 @@ export interface Production {
   area: number;
   quantityExpected: number;
   quantityHarvested: number;
-  status: StatusGoal;
+  status: StatusProduction;
   plantingDate: Date;
   harvestDate?: Date;
   userId: number;
   createdAt: Date;
+  cost: number;
 }
 
-export enum StatusGoal {
+export enum StatusProduction {
   WAITING = 'WAITING',
   IN_PROGRESS = 'IN_PROGRESS',
   HARVESTED = 'HARVESTED',

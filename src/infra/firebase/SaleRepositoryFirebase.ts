@@ -1,4 +1,5 @@
 import admin from './FirebaseAdmin';
+
 import { SaleRepository } from '@/domain/repositories/SaleRepository';
 import { Sale } from '@/domain/entities/Sale';
 
@@ -34,5 +35,17 @@ export class SaleRepositoryFirebase implements SaleRepository {
   async deleteSale(uid: string): Promise<void> {
     if (!uid) throw new Error('Sale id is required for update');
     await admin.firestore().collection('sales').doc(uid).delete();
+  }
+
+  async getSalesByProductId(productId: string): Promise<Sale[]> {
+    const snapshot = await admin
+      .firestore()
+      .collection('sales')
+      .where('productId', '==', productId)
+      .get();
+    return snapshot.docs.map((doc) => ({
+      uid: doc.id,
+      ...doc.data(),
+    })) as Sale[];
   }
 }
