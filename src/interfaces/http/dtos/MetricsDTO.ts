@@ -59,3 +59,12 @@ export interface CostPerKgResponse {
   costPerKg: number;
   productionCount: number;
 }
+
+export interface BestYieldProductResponse {
+  productId: string;
+  productName: string;
+  yieldPerHectare: number;
+  totalHarvested: number;
+  totalArea: number;
+  productionCount: number;
+}

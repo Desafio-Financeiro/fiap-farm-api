@@ -6,6 +6,7 @@ import { Product } from '@/domain/entities/Product';
 import { YieldPerHectareUseCase } from '@/usercases/metrics/YieldPerHectareUseCase';
 import {
   AverageCycleResponse,
+  BestYieldProductResponse,
   CostPerKgResponse,
   LossRateResponse,
   NetProfitResponse,
@@ -17,6 +18,7 @@ import { NetProfitUseCase } from '@/usercases/metrics/NetProfitUseCase';
 import { SaleRepositoryFirebase } from '@/infra/firebase/SaleRepositoryFirebase';
 import { LossRateUseCase } from '@/usercases/metrics/LossRateUseCase';
 import { CostPerKgUseCase } from '@/usercases/metrics/CostPerKgUseCase';
+import { BestYieldProductUseCase } from '@/usercases/metrics/BestYieldProductUseCase';
 
 const productRepo = new ProductRepositoryFirebase();
 const productionRepo = new ProductionRepositoryFirebase();
@@ -26,6 +28,7 @@ const yieldPerHectareUseCase = new YieldPerHectareUseCase(productionRepo);
 const averageCycleUseCase = new AverageCycleUseCase(productionRepo);
 const lossRateUseCase = new LossRateUseCase(productionRepo);
 const costPerKgUseCase = new CostPerKgUseCase(productionRepo);
+const bestYieldProductUseCase = new BestYieldProductUseCase(productionRepo);
 const netProfitUseCase = new NetProfitUseCase(productionRepo, saleRepo);
 
 const getYieldPerHectare = async (req: Request): Promise<YieldPerHectareResponse> => {
@@ -98,6 +101,16 @@ const getCostPerKg = async (req: Request): Promise<CostPerKgResponse> => {
   };
 };
 
+const getBestYieldProduct = async (): Promise<BestYieldProductResponse> => {
+  const bestYieldProduct = await bestYieldProductUseCase.execute();
+
+  const product = await verifyProductExists(bestYieldProduct.productId);
+  return {
+    ...bestYieldProduct,
+    productName: product.name,
+  };
+};
+
 export const verifyProductExists = async (id: Product['uid']) => {
   const product = await showProductUseCase.execute(id);
 
@@ -113,6 +126,7 @@ const MetricsController = {
   getNetProfit,
   getLossRate,
   getCostPerKg,
+  getBestYieldProduct,
 };
 
 export default MetricsController;

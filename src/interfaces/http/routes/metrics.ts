@@ -254,5 +254,50 @@ metricsRouter.get('/cost-per-kg', async (req: Request, res: Response, next) => {
     next(error);
   }
 });
+/**
+ * @swagger
+ * /metrics/best-yield-product:
+ *   get:
+ *     summary: Retorna o produto com melhor rendimento médio por hectare
+ *     tags: [Metrics]
+ *     responses:
+ *       200:
+ *         description: Produto com maior rendimento encontrado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 productId:
+ *                   type: string
+ *                   example: "soja-123"
+ *                 productName:
+ *                   type: string
+ *                   example: "Soja"
+ *                 yieldPerHectare:
+ *                   type: number
+ *                   example: 3200
+ *                   description: Rendimento médio por hectare (kg/ha)
+ *                 totalHarvested:
+ *                   type: number
+ *                   example: 9600
+ *                   description: Soma total colhida do produto
+ *                 totalArea:
+ *                   type: number
+ *                   example: 3
+ *                   description: Soma da área plantada nas produções válidas
+ *                 productionCount:
+ *                   type: number
+ *                   example: 4
+ *                   description: Número de produções colhidas consideradas
+ */
+metricsRouter.get('/best-yield-product', async (_req: Request, res: Response, next) => {
+  try {
+    const product = await MetricsController.getBestYieldProduct();
+    res.json(product);
+  } catch (error) {
+    next(error);
+  }
+});
 
 export default metricsRouter;

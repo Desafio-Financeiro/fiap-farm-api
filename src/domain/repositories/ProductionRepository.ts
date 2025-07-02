@@ -17,4 +17,6 @@ export interface ProductionRepository {
     status: Production['status'],
     productId: Production['productId'],
   ): Promise<Production[]>;
+
+  getProductionsByStatus(status: Production['status']): Promise<Production[]>;
 }

@@ -65,4 +65,16 @@ export class ProductionRepositoryFirebase implements ProductionRepository {
     if (!uid) throw new Error('Production id is required for update');
     await admin.firestore().collection('productions').doc(uid).delete();
   }
+
+  async getProductionsByStatus(status: Production['status']): Promise<Production[]> {
+    const snapshot = await admin
+      .firestore()
+      .collection('productions')
+      .where('status', '==', status)
+      .get();
+    return snapshot.docs.map((doc) => ({
+      uid: doc.id,
+      ...doc.data(),
+    })) as Production[];
+  }
 }
