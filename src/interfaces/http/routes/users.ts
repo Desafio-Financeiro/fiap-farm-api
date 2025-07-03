@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import UserController from '@/interfaces/http/controllers/UserController';
 import authenticateFirebase from '@/interfaces/http/middleware/authFirebase';
 

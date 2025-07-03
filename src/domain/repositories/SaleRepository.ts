@@ -10,4 +10,6 @@ export interface SaleRepository {
   updateSale(sale: Sale): Promise<Sale>;
 
   deleteSale(uid: Sale['uid']): Promise<void>;
+
+  getSalesByProductId(productId: Sale['productId']): Promise<Sale[]>;
 }
