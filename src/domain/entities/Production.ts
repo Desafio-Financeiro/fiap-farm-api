@@ -1,3 +1,5 @@
+import { Product } from '@/domain/entities/Product';
+
 export interface Production {
   uid: string;
   productId: string;
@@ -10,6 +12,7 @@ export interface Production {
   userId: number;
   createdAt: Date;
   cost: number;
+  product?: Product;
 }
 
 export enum StatusProduction {

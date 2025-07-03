@@ -7,10 +7,30 @@ import { Product } from '@/domain/entities/Product';
 export class ProductionRepositoryFirebase implements ProductionRepository {
   async listProductions(): Promise<Production[]> {
     const snapshot = await admin.firestore().collection('productions').get();
-    return snapshot.docs.map((doc) => ({
+
+    const productions = snapshot.docs.map((doc) => ({
       uid: doc.id,
       ...doc.data(),
     })) as Production[];
+
+    const productIds = [...new Set(productions.map((p) => p.productId))];
+
+    const productSnapshots = await Promise.all(
+      productIds.map((id) => admin.firestore().collection('products').doc(id).get()),
+    );
+
+    const productMap = new Map<string, Product>();
+
+    productSnapshots.forEach((snap) => {
+      if (snap.exists) {
+        productMap.set(snap.id, { uid: snap.id, ...snap.data() } as Product);
+      }
+    });
+
+    return productions.map((production) => ({
+      ...production,
+      product: productMap.get(production.productId),
+    }));
   }
 
   async getProductionById(id: string): Promise<Production | null> {
