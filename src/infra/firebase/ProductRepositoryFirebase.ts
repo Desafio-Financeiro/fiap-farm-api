@@ -12,11 +12,19 @@ export class ProductRepositoryFirebase implements ProductRepository {
   }
 
   async getProductById(id: string): Promise<Product | null> {
-    const doc = await admin.firestore().collection('products').doc(id).get();
-    if (!doc.exists) {
+    const snapshot = await admin
+      .firestore()
+      .collection('products')
+      .where('uid', '==', id)
+      .limit(1)
+      .get();
+
+    if (snapshot.empty) {
       return null;
     }
-    return { ...doc.data(), uid: doc.id } as Product;
+
+    const doc = snapshot.docs[0];
+    return doc.data() as Product;
   }
 
   async createProduct(product: Product): Promise<Product> {
@@ -36,3 +44,4 @@ export class ProductRepositoryFirebase implements ProductRepository {
     await admin.firestore().collection('products').doc(uid).delete();
   }
 }
+
