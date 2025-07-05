@@ -1,3 +1,5 @@
+import { Product } from './Product';
+
 export interface Production {
   uid: string;
   productId: string;
@@ -9,6 +11,7 @@ export interface Production {
   harvestDate?: Date;
   userId: number;
   createdAt: Date;
+  product: Product;
 }
 
 export enum StatusGoal {
@@ -16,3 +19,4 @@ export enum StatusGoal {
   IN_PROGRESS = 'IN_PROGRESS',
   HARVESTED = 'HARVESTED',
 }
+
