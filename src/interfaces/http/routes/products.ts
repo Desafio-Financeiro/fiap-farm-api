@@ -122,7 +122,7 @@ productRouter.put('/:id', async (req, res, next) => {
 productRouter.delete('/:id', async (req, res, next) => {
   try {
     await ProductController.removeProduct(req);
-    res.status(200).send();
+    res.status(200).json({ success: true });
   } catch (error) {
     next(error);
   }

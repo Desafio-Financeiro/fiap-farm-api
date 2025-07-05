@@ -113,4 +113,14 @@ productionsRouter.put('/:id', async (req, res, next) => {
   }
 });
 
+productionsRouter.delete('/:id', async (req, res, next) => {
+  try {
+    await ProductionController.removeProduction(req);
+    res.status(200).json({ success: true });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default productionsRouter;
+
