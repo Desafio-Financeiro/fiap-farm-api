@@ -12,7 +12,7 @@ export interface Production {
   userId: number;
   createdAt: Date;
   cost: number;
-  product?: Product;
+  product: Product;
 }
 
 export enum StatusProduction {
@@ -20,3 +20,4 @@ export enum StatusProduction {
   IN_PROGRESS = 'IN_PROGRESS',
   HARVESTED = 'HARVESTED',
 }
+

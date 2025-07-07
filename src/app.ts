@@ -3,6 +3,7 @@ import 'module-alias/register';
 import path from 'path';
 
 import express from 'express';
+import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import swaggerUi from 'swagger-ui-express';
@@ -28,6 +29,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -42,3 +44,4 @@ app.use('/metrics', metricsRouter);
 app.use(errorHandler);
 
 export default app;
+

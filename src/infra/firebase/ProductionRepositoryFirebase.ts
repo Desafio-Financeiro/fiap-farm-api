@@ -5,32 +5,35 @@ import { Production } from '@/domain/entities/Production';
 import { Product } from '@/domain/entities/Product';
 
 export class ProductionRepositoryFirebase implements ProductionRepository {
-  async listProductions(): Promise<Production[]> {
+  async listProductions(): Promise<any[]> {
     const snapshot = await admin.firestore().collection('productions').get();
 
-    const productions = snapshot.docs.map((doc) => ({
-      uid: doc.id,
-      ...doc.data(),
-    })) as Production[];
+    const productionsWithProducts = await Promise.all(
+      snapshot.docs.map(async (doc) => {
+        const productionData = doc.data();
+        const productId = productionData.productId;
 
-    const productIds = [...new Set(productions.map((p) => p.productId))];
+        const productSnapshot = await admin
+          .firestore()
+          .collection('products')
+          .where('uid', '==', productId)
+          .limit(1)
+          .get();
 
-    const productSnapshots = await Promise.all(
-      productIds.map((id) => admin.firestore().collection('products').doc(id).get()),
+        let productData = null;
+        if (!productSnapshot.empty) {
+          productData = productSnapshot.docs[0].data();
+        }
+
+        return {
+          uid: doc.id,
+          ...productionData,
+          product: productData,
+        };
+      }),
     );
 
-    const productMap = new Map<string, Product>();
-
-    productSnapshots.forEach((snap) => {
-      if (snap.exists) {
-        productMap.set(snap.id, { uid: snap.id, ...snap.data() } as Product);
-      }
-    });
-
-    return productions.map((production) => ({
-      ...production,
-      product: productMap.get(production.productId),
-    }));
+    return productionsWithProducts;
   }
 
   async getProductionById(id: string): Promise<Production | null> {
