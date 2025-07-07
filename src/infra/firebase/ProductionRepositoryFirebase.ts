@@ -8,7 +8,7 @@ export class ProductionRepositoryFirebase implements ProductionRepository {
   async listProductions(): Promise<any[]> {
     const snapshot = await admin.firestore().collection('productions').get();
 
-    const productionsWithProducts = await Promise.all(
+    return await Promise.all(
       snapshot.docs.map(async (doc) => {
         const productionData = doc.data();
         const productId = productionData.productId;
@@ -32,8 +32,6 @@ export class ProductionRepositoryFirebase implements ProductionRepository {
         };
       }),
     );
-
-    return productionsWithProducts;
   }
 
   async getProductionById(id: string): Promise<Production | null> {
