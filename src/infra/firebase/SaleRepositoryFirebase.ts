@@ -50,27 +50,35 @@ export class SaleRepositoryFirebase implements SaleRepository {
     const totalPrice = sale.unitPrice * sale.quantity;
     const saleToUpdate = { ...sale, totalPrice };
     const docRef = admin.firestore().collection('sales').doc(sale.uid);
+
+    const prevDoc = await docRef.get();
+    const prevStatus = prevDoc.data()?.status;
+
     await docRef.set(saleToUpdate, { merge: true });
 
-    if (sale.status === 'COMPLETED') {
-      const inventoryRepo = new InventoryMovementRepositoryFirebase();
-      const existingMovements = await admin
-        .firestore()
-        .collection('inventoryMovements')
-        .where('referenceId', '==', sale.uid)
-        .where('source', '==', SourceInventoryMovement.SALE)
-        .get();
-      if (existingMovements.empty) {
-        const movement: InventoryMovement = {
-          productId: sale.productId,
-          type: TypeInventoryMovement.EXIT,
-          quantity: sale.quantity,
-          source: SourceInventoryMovement.SALE,
-          referenceId: sale.uid,
-          createdAt: new Date(),
-        };
-        await inventoryRepo.createInventoryMovement(movement);
-      }
+    const inventoryRepo = new InventoryMovementRepositoryFirebase();
+    const movementQuery = await admin
+      .firestore()
+      .collection('inventoryMovements')
+      .where('referenceId', '==', sale.uid)
+      .where('source', '==', SourceInventoryMovement.SALE)
+      .get();
+    const movementDoc = movementQuery.empty ? null : movementQuery.docs[0];
+
+    if (sale.status === 'COMPLETED' && movementQuery.empty) {
+      const movement: InventoryMovement = {
+        productId: sale.productId,
+        type: TypeInventoryMovement.EXIT,
+        quantity: sale.quantity,
+        source: SourceInventoryMovement.SALE,
+        referenceId: sale.uid,
+        createdAt: new Date(),
+      };
+      await inventoryRepo.createInventoryMovement(movement);
+    }
+
+    if (prevStatus === 'COMPLETED' && sale.status !== 'COMPLETED' && movementDoc) {
+      await inventoryRepo.deleteInventoryMovement(movementDoc.id);
     }
     return saleToUpdate;
   }

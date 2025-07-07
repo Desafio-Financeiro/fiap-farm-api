@@ -45,27 +45,36 @@ export class ProductionRepositoryFirebase implements ProductionRepository {
   async updateProduction(production: Production): Promise<Production> {
     if (!production.uid) throw new Error('Production id is required for update');
     const docRef = admin.firestore().collection('productions').doc(production.uid);
+
+    const prevDoc = await docRef.get();
+    const prevStatus = prevDoc.data()?.status;
+
     await docRef.set(production, { merge: true });
 
-    if (production.status === 'HARVESTED') {
-      const inventoryRepo = new InventoryMovementRepositoryFirebase();
-      const existingMovements = await admin
-        .firestore()
-        .collection('inventoryMovements')
-        .where('referenceId', '==', production.uid)
-        .where('source', '==', SourceInventoryMovement.PRODUCTION)
-        .get();
-      if (existingMovements.empty) {
-        const movement: InventoryMovement = {
-          productId: production.productId,
-          type: TypeInventoryMovement.ENTRY,
-          quantity: production.quantityHarvested,
-          source: SourceInventoryMovement.PRODUCTION,
-          referenceId: production.uid,
-          createdAt: new Date(),
-        };
-        await inventoryRepo.createInventoryMovement(movement);
-      }
+    const inventoryRepo = new InventoryMovementRepositoryFirebase();
+    const movementQuery = await admin
+      .firestore()
+      .collection('inventoryMovements')
+      .where('referenceId', '==', production.uid)
+      .where('source', '==', SourceInventoryMovement.PRODUCTION)
+      .get();
+    const movementDoc = movementQuery.empty ? null : movementQuery.docs[0];
+
+    // Se mudou para HARVESTED e não existe movimento, cria
+    if (production.status === 'HARVESTED' && movementQuery.empty) {
+      const movement: InventoryMovement = {
+        productId: production.productId,
+        type: TypeInventoryMovement.ENTRY,
+        quantity: production.quantityHarvested,
+        source: SourceInventoryMovement.PRODUCTION,
+        referenceId: production.uid,
+        createdAt: new Date(),
+      };
+      await inventoryRepo.createInventoryMovement(movement);
+    }
+
+    if (prevStatus === 'HARVESTED' && production.status !== 'HARVESTED' && movementDoc) {
+      await inventoryRepo.deleteInventoryMovement(movementDoc.id);
     }
     return production;
   }
