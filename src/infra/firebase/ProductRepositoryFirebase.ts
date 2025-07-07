@@ -1,4 +1,5 @@
 import admin from './FirebaseAdmin';
+
 import { ProductRepository } from '@/domain/repositories/ProductRepository';
 import { Product } from '@/domain/entities/Product';
 
@@ -44,4 +45,3 @@ export class ProductRepositoryFirebase implements ProductRepository {
     await admin.firestore().collection('products').doc(uid).delete();
   }
 }
-

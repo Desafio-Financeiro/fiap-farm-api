@@ -1,35 +1,24 @@
 import admin from './FirebaseAdmin';
+import { ProductRepositoryFirebase } from './ProductRepositoryFirebase';
 
 import { ProductionRepository } from '@/domain/repositories/ProductionRepository';
 import { Production } from '@/domain/entities/Production';
 import { Product } from '@/domain/entities/Product';
 
 export class ProductionRepositoryFirebase implements ProductionRepository {
-  async listProductions(): Promise<any[]> {
+  async listProductions(): Promise<Production[]> {
+    const productRepo = new ProductRepositoryFirebase();
     const snapshot = await admin.firestore().collection('productions').get();
 
     return await Promise.all(
       snapshot.docs.map(async (doc) => {
         const productionData = doc.data();
-        const productId = productionData.productId;
-
-        const productSnapshot = await admin
-          .firestore()
-          .collection('products')
-          .where('uid', '==', productId)
-          .limit(1)
-          .get();
-
-        let productData = null;
-        if (!productSnapshot.empty) {
-          productData = productSnapshot.docs[0].data();
-        }
-
+        const product = await productRepo.getProductById(productionData.productId);
         return {
-          uid: doc.id,
           ...productionData,
-          product: productData,
-        };
+          uid: doc.id,
+          product: product!, // força não nulo, pois Production exige product
+        } as Production;
       }),
     );
   }
