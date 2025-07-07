@@ -1,9 +1,15 @@
 import admin from './FirebaseAdmin';
 import { ProductRepositoryFirebase } from './ProductRepositoryFirebase';
+import { InventoryMovementRepositoryFirebase } from './InventoryMovementRepositoryFirebase';
 
 import { ProductionRepository } from '@/domain/repositories/ProductionRepository';
 import { Production } from '@/domain/entities/Production';
 import { Product } from '@/domain/entities/Product';
+import {
+  SourceInventoryMovement,
+  TypeInventoryMovement,
+  InventoryMovement,
+} from '@/domain/entities/InventoryMovement';
 
 export class ProductionRepositoryFirebase implements ProductionRepository {
   async listProductions(): Promise<Production[]> {
@@ -40,6 +46,27 @@ export class ProductionRepositoryFirebase implements ProductionRepository {
     if (!production.uid) throw new Error('Production id is required for update');
     const docRef = admin.firestore().collection('productions').doc(production.uid);
     await docRef.set(production, { merge: true });
+
+    if (production.status === 'HARVESTED') {
+      const inventoryRepo = new InventoryMovementRepositoryFirebase();
+      const existingMovements = await admin
+        .firestore()
+        .collection('inventoryMovements')
+        .where('referenceId', '==', production.uid)
+        .where('source', '==', SourceInventoryMovement.PRODUCTION)
+        .get();
+      if (existingMovements.empty) {
+        const movement: InventoryMovement = {
+          productId: production.productId,
+          type: TypeInventoryMovement.ENTRY,
+          quantity: production.quantityHarvested,
+          source: SourceInventoryMovement.PRODUCTION,
+          referenceId: production.uid,
+          createdAt: new Date(),
+        };
+        await inventoryRepo.createInventoryMovement(movement);
+      }
+    }
     return production;
   }
 

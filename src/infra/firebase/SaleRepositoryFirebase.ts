@@ -1,8 +1,14 @@
 import admin from './FirebaseAdmin';
 import { ProductRepositoryFirebase } from './ProductRepositoryFirebase';
+import { InventoryMovementRepositoryFirebase } from './InventoryMovementRepositoryFirebase';
 
 import { SaleRepository } from '@/domain/repositories/SaleRepository';
 import { Sale } from '@/domain/entities/Sale';
+import {
+  SourceInventoryMovement,
+  TypeInventoryMovement,
+  InventoryMovement,
+} from '@/domain/entities/InventoryMovement';
 
 export class SaleRepositoryFirebase implements SaleRepository {
   async listSales(): Promise<Sale[]> {
@@ -45,6 +51,27 @@ export class SaleRepositoryFirebase implements SaleRepository {
     const saleToUpdate = { ...sale, totalPrice };
     const docRef = admin.firestore().collection('sales').doc(sale.uid);
     await docRef.set(saleToUpdate, { merge: true });
+
+    if (sale.status === 'COMPLETED') {
+      const inventoryRepo = new InventoryMovementRepositoryFirebase();
+      const existingMovements = await admin
+        .firestore()
+        .collection('inventoryMovements')
+        .where('referenceId', '==', sale.uid)
+        .where('source', '==', SourceInventoryMovement.SALE)
+        .get();
+      if (existingMovements.empty) {
+        const movement: InventoryMovement = {
+          productId: sale.productId,
+          type: TypeInventoryMovement.EXIT,
+          quantity: sale.quantity,
+          source: SourceInventoryMovement.SALE,
+          referenceId: sale.uid,
+          createdAt: new Date(),
+        };
+        await inventoryRepo.createInventoryMovement(movement);
+      }
+    }
     return saleToUpdate;
   }
 
