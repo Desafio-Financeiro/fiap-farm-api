@@ -18,6 +18,7 @@ import goalsRouter from '@/interfaces/http/routes/goals';
 import productionsRouter from '@/interfaces/http/routes/productions';
 import inventoryMovementRouter from '@/interfaces/http/routes/inventoryMovements';
 import swaggerSpec from '@/swagger';
+import metricsRouter from '@/interfaces/http/routes/metrics';
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use('/goals', goalsRouter);
 app.use('/productions', productionsRouter);
 app.use('/inventory-movements', inventoryMovementRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/metrics', metricsRouter);
 
 app.use(errorHandler);
 

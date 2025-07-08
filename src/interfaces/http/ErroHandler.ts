@@ -1,11 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 
-function errorHandler(
-  err: unknown,
-  _req: Request,
-  res: Response,
-  _next: NextFunction,
-) {
+function errorHandler(err: unknown, _req: Request, res: Response) {
   console.error(err);
 
   if (err instanceof Error) {

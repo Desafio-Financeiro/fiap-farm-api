@@ -1,3 +1,5 @@
+import { Product } from '@/domain/entities/Product';
+
 export interface Sale {
   uid?: string;
   productId: string;
@@ -8,6 +10,7 @@ export interface Sale {
   unitPrice: number;
   createdAt?: Date;
   status?: SaleStatus;
+  product: Product;
 }
 
 export enum SaleStatus {
