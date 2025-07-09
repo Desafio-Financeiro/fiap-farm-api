@@ -72,6 +72,7 @@ export class SaleRepositoryFirebase implements SaleRepository {
         quantity: sale.quantity,
         source: SourceInventoryMovement.SALE,
         referenceId: sale.uid,
+        product: sale.product,
         createdAt: new Date(),
       };
       await inventoryRepo.createInventoryMovement(movement);

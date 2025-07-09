@@ -2,14 +2,24 @@ import admin from './FirebaseAdmin';
 
 import { InventoryMovementRepository } from '@/domain/repositories/InventoryMovementRepository';
 import { InventoryMovement } from '@/domain/entities/InventoryMovement';
+import { ProductRepositoryFirebase } from './ProductRepositoryFirebase';
 
 export class InventoryMovementRepositoryFirebase implements InventoryMovementRepository {
   async listInventoryMovements(): Promise<InventoryMovement[]> {
+    const productRepo = new ProductRepositoryFirebase();
     const snapshot = await admin.firestore().collection('inventoryMovements').get();
-    return snapshot.docs.map((doc) => ({
-      uid: doc.id,
-      ...doc.data(),
-    })) as InventoryMovement[];
+
+    return await Promise.all(
+      snapshot.docs.map(async (doc) => {
+        const productionData = doc.data();
+        const product = await productRepo.getProductById(productionData.productId);
+        return {
+          ...productionData,
+          uid: doc.id,
+          product: product!,
+        } as InventoryMovement;
+      }),
+    );
   }
 
   async getInventoryMovementById(id: string): Promise<InventoryMovement | null> {
@@ -37,3 +47,4 @@ export class InventoryMovementRepositoryFirebase implements InventoryMovementRep
     await admin.firestore().collection('inventoryMovements').doc(uid).delete();
   }
 }
+

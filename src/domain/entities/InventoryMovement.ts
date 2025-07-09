@@ -1,3 +1,5 @@
+import { Product } from './Product';
+
 export interface InventoryMovement {
   uid?: string;
   productId: string;
@@ -6,6 +8,7 @@ export interface InventoryMovement {
   source: SourceInventoryMovement;
   referenceId: string;
   createdAt?: Date;
+  product: Product;
 }
 
 export enum SourceInventoryMovement {
@@ -16,3 +19,4 @@ export enum TypeInventoryMovement {
   ENTRY = 'ENTRY',
   EXIT = 'EXIT',
 }
+

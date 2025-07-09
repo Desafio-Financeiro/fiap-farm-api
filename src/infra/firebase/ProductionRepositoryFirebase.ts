@@ -68,6 +68,7 @@ export class ProductionRepositoryFirebase implements ProductionRepository {
         quantity: production.quantityHarvested,
         source: SourceInventoryMovement.PRODUCTION,
         referenceId: production.uid,
+        product: production.product,
         createdAt: new Date(),
       };
       await inventoryRepo.createInventoryMovement(movement);
@@ -124,3 +125,4 @@ export class ProductionRepositoryFirebase implements ProductionRepository {
     })) as Production[];
   }
 }
+
