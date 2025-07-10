@@ -113,4 +113,14 @@ inventoryMovementRouter.put('/:id', async (req, res, next) => {
   }
 });
 
+inventoryMovementRouter.delete('/:id', async (req, res, next) => {
+  try {
+    await InventoryMovementController.removeInventoryMovement(req);
+    res.status(200).json({ success: true });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default inventoryMovementRouter;
+
