@@ -9,7 +9,6 @@ import { RemoveSaleUseCase } from '@/usercases/sale/RemoveSaleUseCase';
 import { verifyProductExists } from '@/interfaces/http/controllers/ProductController';
 import { Sale } from '@/domain/entities/Sale';
 
-
 const saleRepo = new SaleRepositoryFirebase();
 const listSaleUseCase = new ListSaleUseCase(saleRepo);
 const createSaleUseCase = new CreateSaleUseCase(saleRepo);
@@ -73,3 +72,4 @@ const SaleController = {
 };
 
 export default SaleController;
+

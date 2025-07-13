@@ -113,4 +113,14 @@ saleRouter.put('/:id', async (req, res, next) => {
   }
 });
 
+saleRouter.delete('/:id', async (req, res, next) => {
+  try {
+    await SaleController.removeSale(req);
+    res.status(200).json({ success: true });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default saleRouter;
+
