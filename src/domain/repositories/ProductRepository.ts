@@ -1,9 +1,9 @@
 import { Product } from '@/domain/entities/Product';
 
 export interface ProductRepository {
-  listProducts(): Promise<Product[]>;
+  getAll(): Promise<Product[]>;
 
-  getProductById(uid: Product['uid']): Promise<Product | null>;
+  getById(uid: Product['uid']): Promise<Product | null>;
 
   createProduct(product: Product): Promise<Product>;
 

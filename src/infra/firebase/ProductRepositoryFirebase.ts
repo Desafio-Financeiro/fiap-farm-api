@@ -4,7 +4,7 @@ import { ProductRepository } from '@/domain/repositories/ProductRepository';
 import { Product } from '@/domain/entities/Product';
 
 export class ProductRepositoryFirebase implements ProductRepository {
-  async listProducts(): Promise<Product[]> {
+  async getAll(): Promise<Product[]> {
     const snapshot = await admin.firestore().collection('products').get();
     return snapshot.docs.map((doc) => ({
       uid: doc.id,
@@ -12,7 +12,7 @@ export class ProductRepositoryFirebase implements ProductRepository {
     })) as Product[];
   }
 
-  async getProductById(id: string): Promise<Product | null> {
+  async getById(id: string): Promise<Product | null> {
     const snapshot = await admin
       .firestore()
       .collection('products')

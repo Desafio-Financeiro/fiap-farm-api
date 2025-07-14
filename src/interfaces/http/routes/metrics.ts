@@ -254,6 +254,7 @@ metricsRouter.get('/cost-per-kg', async (req: Request, res: Response, next) => {
     next(error);
   }
 });
+
 /**
  * @swagger
  * /metrics/best-yield-product:
@@ -295,6 +296,117 @@ metricsRouter.get('/best-yield-product', async (_req: Request, res: Response, ne
   try {
     const product = await MetricsController.getBestYieldProduct();
     res.json(product);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * @swagger
+ * /metrics/top-sold-products:
+ *   get:
+ *     summary: Retorna os 5 produtos mais vendidos
+ *     tags: [Metrics]
+ *     responses:
+ *       200:
+ *         description: Lista dos produtos mais vendidos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 topProducts:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       productId:
+ *                         type: string
+ *                       productName:
+ *                         type: string
+ *                       totalSold:
+ *                         type: number
+ *                       totalRevenue:
+ *                         type: number
+ */
+metricsRouter.get('/top-sold-products', async (_req: Request, res: Response, next) => {
+  try {
+    const product = await MetricsController.getBestYieldProduct();
+    res.json(product);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * @swagger
+ * /metrics/fastest-products:
+ *   get:
+ *     summary: Retorna os 5 produtos com menor tempo médio de produção
+ *     tags: [Metrics]
+ *     responses:
+ *       200:
+ *         description: Lista dos produtos com menor tempo de produção
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 fastestProducts:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       productId:
+ *                         type: string
+ *                       productName:
+ *                         type: string
+ *                       averageProductionDays:
+ *                         type: number
+ */
+metricsRouter.get('/fastest-products', async (_req: Request, res: Response, next) => {
+  try {
+    const products = await MetricsController.getFastestProducts();
+    res.json(products);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * @swagger
+ * /metrics/total-sales:
+ *   get:
+ *     summary: Retorna o total de vendas de todos os produtos
+ *     tags: [Metrics]
+ *     responses:
+ *       200:
+ *         description: Total de vendas agrupado por produto
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 products:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       productId:
+ *                         type: string
+ *                       productName:
+ *                         type: string
+ *                       totalRevenue:
+ *                         type: number
+ *                       totalQuantity:
+ *                         type: number
+ *                       salesCount:
+ *                         type: number
+ */
+metricsRouter.get('/most-produced-product', async (_req: Request, res: Response, next) => {
+  try {
+    const result = await MetricsController.getMostProducedProduct();
+    res.json(result);
   } catch (error) {
     next(error);
   }
