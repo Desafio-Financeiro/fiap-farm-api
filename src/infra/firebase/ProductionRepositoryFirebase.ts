@@ -19,7 +19,7 @@ export class ProductionRepositoryFirebase implements ProductionRepository {
     return await Promise.all(
       snapshot.docs.map(async (doc) => {
         const productionData = doc.data();
-        const product = await productRepo.getProductById(productionData.productId);
+        const product = await productRepo.getById(productionData.productId);
         return {
           ...productionData,
           uid: doc.id,
@@ -125,4 +125,3 @@ export class ProductionRepositoryFirebase implements ProductionRepository {
     })) as Production[];
   }
 }
-

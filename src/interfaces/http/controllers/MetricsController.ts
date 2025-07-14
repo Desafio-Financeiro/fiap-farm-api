@@ -8,8 +8,12 @@ import {
   AverageCycleResponse,
   BestYieldProductResponse,
   CostPerKgResponse,
+  FastestProductsResponse,
   LossRateResponse,
+  MostProducedProductResponse,
   NetProfitResponse,
+  TopSoldProductsResponse,
+  TotalSalesResponse,
   YieldPerHectareResponse,
 } from '@/interfaces/http/dtos/MetricsDTO';
 import { ProductionRepositoryFirebase } from '@/infra/firebase/ProductionRepositoryFirebase';
@@ -19,6 +23,10 @@ import { SaleRepositoryFirebase } from '@/infra/firebase/SaleRepositoryFirebase'
 import { LossRateUseCase } from '@/usercases/metrics/LossRateUseCase';
 import { CostPerKgUseCase } from '@/usercases/metrics/CostPerKgUseCase';
 import { BestYieldProductUseCase } from '@/usercases/metrics/BestYieldProductUseCase';
+import { TopSoldProductsUseCase } from '@/usercases/metrics/TopSoldProductsUseCase';
+import { FastestProductsUseCase } from '@/usercases/metrics/FastestProductUseCase';
+import { MostProducedProductUseCase } from '@/usercases/metrics/MostProducedProductUseCase';
+import { TotalSalesUseCase } from '@/usercases/metrics/TotalSalesUseCase';
 
 const productRepo = new ProductRepositoryFirebase();
 const productionRepo = new ProductionRepositoryFirebase();
@@ -30,6 +38,10 @@ const lossRateUseCase = new LossRateUseCase(productionRepo);
 const costPerKgUseCase = new CostPerKgUseCase(productionRepo);
 const bestYieldProductUseCase = new BestYieldProductUseCase(productionRepo);
 const netProfitUseCase = new NetProfitUseCase(productionRepo, saleRepo);
+const topSoldProductsUseCase = new TopSoldProductsUseCase(saleRepo, productRepo);
+const fastestProductsUseCase = new FastestProductsUseCase(productRepo);
+const mostProducedProductUseCase = new MostProducedProductUseCase(productionRepo, productRepo);
+const totalSalesUseCase = new TotalSalesUseCase(saleRepo, productRepo);
 
 const getYieldPerHectare = async (req: Request): Promise<YieldPerHectareResponse> => {
   const productId = req.query.productId as string | undefined;
@@ -111,6 +123,22 @@ const getBestYieldProduct = async (): Promise<BestYieldProductResponse> => {
   };
 };
 
+const getTopSoldProducts = async (): Promise<TopSoldProductsResponse> => {
+  return await topSoldProductsUseCase.execute();
+};
+
+const getFastestProducts = async (): Promise<FastestProductsResponse> => {
+  return await fastestProductsUseCase.execute();
+};
+
+const getMostProducedProduct = async (): Promise<MostProducedProductResponse> => {
+  return await mostProducedProductUseCase.execute();
+};
+
+const getTotalSales = async (): Promise<TotalSalesResponse> => {
+  return await totalSalesUseCase.execute();
+};
+
 export const verifyProductExists = async (id: Product['uid']) => {
   const product = await showProductUseCase.execute(id);
 
@@ -127,6 +155,10 @@ const MetricsController = {
   getLossRate,
   getCostPerKg,
   getBestYieldProduct,
+  getTopSoldProducts,
+  getFastestProducts,
+  getMostProducedProduct,
+  getTotalSales,
 };
 
 export default MetricsController;

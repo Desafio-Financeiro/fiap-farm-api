@@ -4,6 +4,6 @@ export class ListSaleUseCase {
   constructor(private saleRepository: SaleRepository) {}
 
   async execute() {
-    return this.saleRepository.listSales();
+    return this.saleRepository.getAll();
   }
 }

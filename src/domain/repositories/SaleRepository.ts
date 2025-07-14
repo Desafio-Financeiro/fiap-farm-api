@@ -1,7 +1,7 @@
 import { Sale } from '@/domain/entities/Sale';
 
 export interface SaleRepository {
-  listSales(): Promise<Sale[]>;
+  getAll(): Promise<Sale[]>;
 
   getSaleById(uid: Sale['uid']): Promise<Sale | null>;
 

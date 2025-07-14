@@ -5,6 +5,6 @@ export class ShowProductUseCase {
   constructor(private productRepository: ProductRepository) {}
 
   async execute(id: Product['uid']) {
-    return this.productRepository.getProductById(id);
+    return this.productRepository.getById(id);
   }
 }

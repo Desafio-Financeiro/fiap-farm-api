@@ -4,6 +4,6 @@ export class ListProductUseCase {
   constructor(private productRepository: ProductRepository) {}
 
   async execute() {
-    return this.productRepository.listProducts();
+    return this.productRepository.getAll();
   }
 }

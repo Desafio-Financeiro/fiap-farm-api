@@ -11,13 +11,13 @@ import {
 } from '@/domain/entities/InventoryMovement';
 
 export class SaleRepositoryFirebase implements SaleRepository {
-  async listSales(): Promise<Sale[]> {
+  async getAll(): Promise<Sale[]> {
     const productRepo = new ProductRepositoryFirebase();
     const snapshot = await admin.firestore().collection('sales').get();
     return await Promise.all(
       snapshot.docs.map(async (doc) => {
         const saleData = doc.data();
-        const product = await productRepo.getProductById(saleData.productId);
+        const product = await productRepo.getById(saleData.productId);
         return {
           ...saleData,
           uid: doc.id,
@@ -34,7 +34,7 @@ export class SaleRepositoryFirebase implements SaleRepository {
       return null;
     }
     const saleData = doc.data();
-    const product = await productRepo.getProductById(saleData?.productId);
+    const product = await productRepo.getById(saleData?.productId);
     return { ...saleData, uid: doc.id, product: product! } as Sale;
   }
 

@@ -68,3 +68,40 @@ export interface BestYieldProductResponse {
   totalArea: number;
   productionCount: number;
 }
+
+export interface TopSoldProductsResponse {
+  topProducts: {
+    productId: string;
+    productName: string;
+    totalSold: number;
+    totalRevenue: number;
+  }[];
+}
+
+export interface FastestProduct {
+  productId: string;
+  productName: string;
+  averageProductionDays: number;
+}
+
+export interface FastestProductsResponse {
+  fastestProducts: FastestProduct[];
+}
+
+export interface MostProducedProductResponse {
+  productId: string;
+  productName: string;
+  totalHarvested: number;
+}
+
+export interface TotalSalesProduct {
+  productId: string;
+  productName: string;
+  totalRevenue: number;
+  totalQuantity: number;
+  salesCount: number;
+}
+
+export interface TotalSalesResponse {
+  products: TotalSalesProduct[];
+}
