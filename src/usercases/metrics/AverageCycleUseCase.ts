@@ -12,7 +12,12 @@ export class AverageCycleUseCase {
     );
 
     if (productions.length === 0) {
-      throw new Error(`No productions found for product with id ${productId}`);
+      return {
+        productId,
+        productName: '',
+        averageCycle: 0,
+        productionCount: 0,
+      };
     }
 
     const diffBetweenDates = (start: Date, end: Date): number => {

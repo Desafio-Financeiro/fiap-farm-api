@@ -104,4 +104,5 @@ export interface TotalSalesProduct {
 
 export interface TotalSalesResponse {
   products: TotalSalesProduct[];
+  totalSoldValue: number;
 }

@@ -116,7 +116,13 @@ const getCostPerKg = async (req: Request): Promise<CostPerKgResponse> => {
 const getBestYieldProduct = async (): Promise<BestYieldProductResponse> => {
   const bestYieldProduct = await bestYieldProductUseCase.execute();
 
-  const product = await verifyProductExists(bestYieldProduct.productId);
+  const product = bestYieldProduct.productId
+    ? await verifyProductExists(bestYieldProduct.productId)
+    : {
+        uid: '',
+        name: 'Unknown Product',
+        averageProductionDays: 0,
+      };
   return {
     ...bestYieldProduct,
     productName: product.name,

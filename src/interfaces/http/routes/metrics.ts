@@ -331,7 +331,7 @@ metricsRouter.get('/best-yield-product', async (_req: Request, res: Response, ne
  */
 metricsRouter.get('/top-sold-products', async (_req: Request, res: Response, next) => {
   try {
-    const product = await MetricsController.getBestYieldProduct();
+    const product = await MetricsController.getTopSoldProducts();
     res.json(product);
   } catch (error) {
     next(error);

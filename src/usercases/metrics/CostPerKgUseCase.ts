@@ -16,7 +16,14 @@ export class CostPerKgUseCase {
     );
 
     if (validProductions.length === 0) {
-      throw new Error(`No valid harvested productions found for product with id ${productId}`);
+      return {
+        productId,
+        productName: '',
+        totalCost: 0,
+        totalHarvested: 0,
+        costPerKg: 0,
+        productionCount: 0,
+      };
     }
 
     const totalCost = validProductions.reduce((sum, p) => sum + p.cost, 0);

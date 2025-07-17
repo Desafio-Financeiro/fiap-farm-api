@@ -48,7 +48,14 @@ export class BestYieldProductUseCase {
     }
 
     if (yieldList.length === 0) {
-      throw new Error('Nenhum produto com rendimento válido encontrado.');
+      return {
+        productId: '',
+        productName: '',
+        yieldPerHectare: 0,
+        totalHarvested: 0,
+        totalArea: 0,
+        productionCount: 0,
+      };
     }
 
     const best = yieldList.reduce((a, b) => (a.yieldPerHectare > b.yieldPerHectare ? a : b));

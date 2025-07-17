@@ -15,7 +15,11 @@ export class MostProducedProductUseCase {
     );
 
     if (!productions.length) {
-      throw new Error('No harvested productions found');
+      return {
+        productId: '',
+        productName: '',
+        totalHarvested: 0,
+      };
     }
 
     const harvestByProduct = new Map<string, number>();
