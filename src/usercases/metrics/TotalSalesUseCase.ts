@@ -1,6 +1,6 @@
-import { SaleRepository } from '@/domain/repositories/SaleRepository';
 import { ProductRepository } from '@/domain/repositories/ProductRepository';
 import { TotalSalesProduct, TotalSalesResponse } from '@/interfaces/http/dtos/MetricsDTO';
+import { SaleRepository } from '@/domain/repositories/SaleRepository';
 
 export class TotalSalesUseCase {
   constructor(
@@ -16,6 +16,7 @@ export class TotalSalesUseCase {
       string,
       { totalRevenue: number; totalQuantity: number; salesCount: number }
     >();
+    let totalSoldValue = 0;
 
     for (const sale of sales) {
       const current = grouped.get(sale.productId) || {
@@ -23,11 +24,13 @@ export class TotalSalesUseCase {
         totalQuantity: 0,
         salesCount: 0,
       };
-      grouped.set(sale.productId, {
+      const updated = {
         totalRevenue: current.totalRevenue + sale.totalPrice,
         totalQuantity: current.totalQuantity + sale.quantity,
         salesCount: current.salesCount + 1,
-      });
+      };
+      grouped.set(sale.productId, updated);
+      totalSoldValue += sale.totalPrice;
     }
 
     const productsSummary: TotalSalesProduct[] = Array.from(grouped.entries()).map(
@@ -43,6 +46,9 @@ export class TotalSalesUseCase {
       },
     );
 
-    return { products: productsSummary };
+    return {
+      products: productsSummary,
+      totalSoldValue,
+    };
   }
 }

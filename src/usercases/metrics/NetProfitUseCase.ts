@@ -18,17 +18,21 @@ export class NetProfitUseCase {
     const sales = await this.saleRepository.getSalesByProductId(productId);
 
     if (sales.length === 0) {
-      throw new Error(`No sales found for product with id ${productId}`);
+      return {
+        productId,
+        productName: '',
+        totalRevenue: 0,
+        totalCost: 0,
+        netProfit: 0,
+        salesCount: 0,
+        productionCount: productions.length,
+      };
     }
 
     const totalRevenue = sales.reduce((acc, sale) => acc + sale.totalPrice, 0);
     const totalCost = productions.reduce((acc, production) => acc + production.cost, 0);
 
     const netProfit = totalRevenue - totalCost;
-
-    if (productions.length === 0) {
-      throw new Error(`No productions found for product with id ${productId}`);
-    }
 
     return {
       productId,

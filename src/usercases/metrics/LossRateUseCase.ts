@@ -14,7 +14,12 @@ export class LossRateUseCase {
     const validProductions = productions.filter((p) => p.quantityExpected > 0);
 
     if (validProductions.length === 0) {
-      throw new Error(`No valid harvested productions found for product with id ${productId}`);
+      return {
+        productId,
+        productionCount: 0,
+        productName: '',
+        averageLossRate: 0,
+      };
     }
 
     const lossRates = validProductions.map((p) => {

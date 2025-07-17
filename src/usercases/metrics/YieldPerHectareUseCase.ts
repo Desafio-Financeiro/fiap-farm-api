@@ -8,7 +8,14 @@ export class YieldPerHectareUseCase {
     const productions = await this.productionRepository.getProductionsByProductId(productId);
 
     if (productions.length === 0) {
-      throw new Error(`No productions found for product with id ${productId}`);
+      return {
+        productId,
+        productName: '',
+        totalHarvested: 0,
+        totalArea: 0,
+        yieldPerHectare: 0,
+        productionCount: 0,
+      };
     }
     const totalArea = productions.reduce((sum, production) => sum + (production.area || 0), 0);
     const totalQuantityHarvested = productions.reduce(
