@@ -412,4 +412,14 @@ metricsRouter.get('/most-produced-product', async (_req: Request, res: Response,
   }
 });
 
+metricsRouter.get('/total-sales', async (_req: Request, res: Response, next) => {
+  try {
+    const result = await MetricsController.getTotalSales();
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default metricsRouter;
+
