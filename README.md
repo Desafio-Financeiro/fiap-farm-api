@@ -4,6 +4,7 @@ Este é um projeto básico utilizando **TypeScript** e **Express** para criar um
 
 ## Estrutura do Projeto
 
+```
 fia-farm-api/
 ├── public/
 │   ├── index.html
@@ -19,6 +20,7 @@ fia-farm-api/
 ├── README.md
 ├── package.json
 └── tsconfig.json
+```
 
 ## Inicie o servidor:
 ```bash
